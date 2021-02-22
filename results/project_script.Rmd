@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+#output: html_notebook
+---
+
+# Loading data
+## Load data into R
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.txt", )
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+# QC Preprocessing
+Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
+
+# de novo assembly
+**ABySS v1.3.7**
+
+
+# Disassembly BAM files
+**SamToFastq.jar** and **SAMtools**
+
+
+# Alignment
+(reference, de novo concensus) with very sensitive local alignment:
+**Bowtie2 v2.2.4**
+
+
+
+# Compress SAM file and sort by coordinate
+**Samtool view** and **SortSam** using:
+**SAMtools v1.1** and **Picard-tools v1.128**
+
+
+# Remove PCR duplicates
+**MarkDuplicates** and **Picard-tools v1.128**
+
+
+# Variant detection
+**V-phaser2 v2.0**
+
+
+# Shannon entropy
+**RF** and **bam2R** using:
+**deepSNV v1.16.0**
+
+```{r}
+new_entropy = function(x){
+  x[1:5]
+  new_entropy = -sum(x*log(x), na.rm = TRUE)
+  
+  return(new_entropy)}
+```
+
+
