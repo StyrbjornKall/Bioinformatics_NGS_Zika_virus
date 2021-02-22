@@ -11,22 +11,24 @@ library(tidyverse)
 ```
 
 ```{r}
+
 samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.txt", )
+
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
 
 # QC Preprocessing
 Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
+
+```{bash}
+
+# Using the sequencing conda environment containing:
+# conda install samtools bowtie2 breseq abyss bcftools wgsim emboss tree
+
+conda install -c bioconda trimmomatic
+
+
+```
+
 
 # de novo assembly
 **ABySS v1.3.7**
