@@ -24,9 +24,9 @@ Samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.t
 
 cut -f 32 path > new txt file
 ```{bash}
-cut -f 32 path > new txt file
-wget -i new txt file
-gunzip -r [Directory/Folder path]
+cut -f 32 /home/student6/ProjectZIKA/team_project/data/Sample_table.txt > URL_list.txt
+wget -i URL_list.txt
+gunzip -r /home/student6/ProjectZIKA/team_project/data
 
 ```
 ## Including Plots
