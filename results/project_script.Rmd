@@ -12,17 +12,24 @@ root = "/home/student12/project/"
 # Load the metadata, use paste0() to concatenate two strings
 sample_metadata <- read_tsv(paste0(root,"data/sample_metadata.txt"))
 
+# inspect metadata
+head(sample_metadata)
 ```
 
 # QC Preprocessing
 Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
 
 ## Packages and software
+The trimming and quality control is done by using the software Trimmomatic. The version in the article is v0.22, we will operate on the current release v0.39. Although not a part of the original study, we will download the fastQC software for simple data visualization before and after trimming.
+
 ```{bash}
 # Initiate conda
 source ~/.bashrc
 
-# Using the sequencing conda environment containing:
+# activate conda environment
+conda activate project
+
+# The project environment is a clone of the sequencing conda environment containing:
 # conda install samtools bowtie2 breseq abyss bcftools wgsim emboss tree
 
 conda install -c bioconda trimmomatic
@@ -32,9 +39,16 @@ conda install -c bioconda fastqc
 
 ```
 
+Run fastQC software to inspect data. This will generate a .fastqc.zip file and a .html file which can be opened in a browser through Rstudio. This will show basic statistics for the read, including its average quality score across reads.
+
+```{bash}
+fastqc test_data/TEST_FILE
+```
 
 
 ## Trimming and quality control
+Trimming and quality control may now be performed using Trimmomatic v0.39. 
+
 ```{bash}
 
 
