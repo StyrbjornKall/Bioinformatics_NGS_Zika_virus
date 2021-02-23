@@ -19,6 +19,7 @@ samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.t
 # QC Preprocessing
 Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
 
+## Packages and software
 ```{bash}
 
 # Using the sequencing conda environment containing:
