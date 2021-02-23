@@ -19,12 +19,16 @@ Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
 
 ## Packages and software
 ```{bash}
+# Initiate conda
+source ~/.bashrc
 
 # Using the sequencing conda environment containing:
 # conda install samtools bowtie2 breseq abyss bcftools wgsim emboss tree
 
 conda install -c bioconda trimmomatic
 
+# Not mandatory: install fastqc to view fastq files in browser
+conda install -c bioconda fastqc
 
 ```
 

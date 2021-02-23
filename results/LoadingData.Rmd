@@ -34,7 +34,7 @@ Here we prepare a test set on which this script can be tested. The test set is m
 mkdir test_data
 
 # extract first 10000 rows as test set from two files
-head -n 10000 data/all_data/ERR4013290_1.fastq > data/test_data/test_ERR4013290_1.fastq
-head -n 10000 data/all_data/ERR4013290_2.fastq > data/test_data/test_ERR4013290_2.fastq
+head -n 400000 all_data/ERR4013290_1.fastq > test_data/test_ERR4013290_1.fastq
+head -n 400000 all_data/ERR4013290_2.fastq > test_data/test_ERR4013290_2.fastq
 
 ```
