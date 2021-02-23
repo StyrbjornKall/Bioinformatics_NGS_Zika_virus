@@ -6,11 +6,6 @@ title: "R Notebook"
 # Loading data
 ## Load data into R
 ```{r}
-library(tidyverse)
-
-```
-
-```{r}
 
 samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.txt", )
 
@@ -26,6 +21,15 @@ Trim to minimal 35 bases and 35 quality score: **Trimmomatic v0.22**
 # conda install samtools bowtie2 breseq abyss bcftools wgsim emboss tree
 
 conda install -c bioconda trimmomatic
+
+
+```
+
+
+
+## Trimming and quality control
+```{bash}
+
 
 
 ```

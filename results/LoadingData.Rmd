@@ -1,21 +1,40 @@
 ---
-title: "Loading Data"
+title: "Data Acquisition"
 #output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Data acquisition 
+## Acquire data
+Here we fetch all data from ArrayExpress
+```{bash}
+# Make data directory
+mkdir data
+
+# load metadata into data directory
+wget https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-8905/E-MTAB-8905.sdrf.txt > sample_metadata.txt
+
+# Extract URLs
+cut -f 32 sample_metadata.txt > sample_URL_list.txt
+# Fetch data
+wget -i sample_URL_list.txt
+# unzip data
+gunzip -r data
+
+# Make directory to store all data .fastq files
+mkdir all_data
+mv *.fastq all_data
+
 ```
 
-# Loading data
-## Acquire data to server
+## Prepare test data set
+Here we prepare a test set on which this script can be tested. The test set is much smaller than the real data set and consists of two samples corresponding to one strain's two paired reads.
 
 ```{bash}
-# load samples
-wget https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-8905/E-MTAB-8905.sdrf.txt
-# Extract URLs and fetch data
-cut -f 32 SAMPLE_FILE > URL_FILE
-wget -i URL_FILE
-# unzip data
-gunzip -r DIRECTORY
+# Make directory inside data directory to store test data set
+mkdir test_data
+
+# extract first 10000 rows as test set from two files
+head -n 10000 data/all_data/ERR4013290_1.fastq > data/test_data/test_ERR4013290_1.fastq
+head -n 10000 data/all_data/ERR4013290_2.fastq > data/test_data/test_ERR4013290_2.fastq
+
 ```
