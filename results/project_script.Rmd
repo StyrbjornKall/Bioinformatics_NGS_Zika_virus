@@ -6,8 +6,11 @@ title: "R Notebook"
 # Loading data
 ## Load data into R
 ```{r}
+# set root directory
+root = "/home/student12/project/"
 
-samples <- read_tsv("/home/student6/ProjectZIKA/team_project/data/Sample_table.txt", )
+# Load the metadata, use paste0() to concatenate two strings
+sample_metadata <- read_tsv(paste0(root,"data/sample_metadata.txt"))
 
 ```
 
