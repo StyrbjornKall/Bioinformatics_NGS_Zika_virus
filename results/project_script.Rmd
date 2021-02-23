@@ -50,15 +50,34 @@ fastqc test_data/TEST_FILE
 Trimming and quality control may now be performed using Trimmomatic v0.39. 
 
 ```{bash}
+mkdir QC_test_data
 
-
+trimmomatic PE -threads 4 test_ERR4013290_1.fastq test_ERR4013290_2.fastq  \
+              QC_test_data/test_ERR4013290_1.trimmed.fastq                         QC_test_data/test_ERR4013290_1un.trimmed.fastq \
+              QC_test_data/test_ERR4013290_2.trimmed.fastq QC_test_data/test_ERR4013290_2un.trimmed.fastq \
+              TRAILING:35 MINLEN:35
 
 ```
 
-
 # de novo assembly
 **ABySS v1.3.7**
+ABySS v1.3.7 with k values from 20 to 40 was used for de novo assembly of pair-end reads and de novo consensus sequences generated.
 
+```{bash}
+# Install ABySS using conda
+conda install -c bioconda abyss
+```
+
+Run ABySS
+```{bash}
+mkdir abyss
+
+abyss-pe name=WTZIKA k=20 in="QC_test_data/test_ERR4013290_1.trimmed.fastq         QC_test_data/test_ERR4013290_2.trimmed.fastq" 
+```
+
+```{r}
+
+```
 
 # Disassembly BAM files
 **SamToFastq.jar** and **SAMtools**
@@ -68,6 +87,7 @@ Trimming and quality control may now be performed using Trimmomatic v0.39.
 (reference, de novo concensus) with very sensitive local alignment:
 **Bowtie2 v2.2.4**
 
+Found this on GenBank for the wild type strain: https://www.ncbi.nlm.nih.gov/nuccore/MH158236.1
 
 
 # Compress SAM file and sort by coordinate
