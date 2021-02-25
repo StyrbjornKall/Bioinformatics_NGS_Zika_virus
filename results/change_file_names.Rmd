@@ -9,10 +9,10 @@ getwd()
 
 # Define paths
 root = "/home/student12/project/"
-path_to_files = "results/"
+path_to_files = "data/all_data/"
 
 # List the files in a directory
-old_file_names = list.files(paste0(root,path_to_files), pattern = "*.Rmd")
+old_file_names = list.files(paste0(root,path_to_files), pattern = "*.fastq$")
 
 # Look at list
 head(old_file_names)
@@ -21,8 +21,32 @@ head(old_file_names)
 
 ```{r}
 
+# Load metadata
+sample_metadata <- read_tsv(paste0(root,"data/sample_metadata.txt"))
+
+# Inspect metadata
+head(sample_metadata)
+
 ```
 
+```{r}
+library(tidyverse)
 
+# Extract sample names from metadata
+sample_metadata = cbind(sample_metadata, file_name = stringr::str_sub(sample_metadata$'Comment[FASTQ_URI]', -21, -4))
+
+# Inspect changes
+head(sample_metadata)
+
+# Replace spaces with "_" and extract the neccessary data
+new_sample_metadata = cbind(sample_metadata, new_file_names = paste0(stringr::str_replace_all(sample_metadata$`Factor Value[line]`, " ", "_"), ".fastq")) %>%
+  dplyr::select(file_name, new_file_names)
+
+head(new_sample_metadata)
+```
+
+```{r}
+write.table(new_sample_metadata, paste0(root, "data/","old_new_filenames.txt"),sep="\t",row.names=FALSE)
+```
 
 
