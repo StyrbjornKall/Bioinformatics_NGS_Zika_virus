@@ -1,0 +1,28 @@
+---
+title: "Sample name replacement"
+#output: html_notebook
+---
+
+```{r}
+# Check workig directory
+getwd()
+
+# Define paths
+root = "/home/student12/project/"
+path_to_files = "results/"
+
+# List the files in a directory
+old_file_names = list.files(paste0(root,path_to_files), pattern = "*.Rmd")
+
+# Look at list
+head(old_file_names)
+```
+
+
+```{r}
+
+```
+
+
+
+
