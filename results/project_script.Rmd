@@ -70,10 +70,26 @@ conda install -c bioconda abyss
 
 Run ABySS
 ```{bash}
-mkdir abyss
+mkdir abyss_pe
 
-abyss-pe name=WTZIKA k=20 in="QC_test_data/test_ERR4013290_1.trimmed.fastq         QC_test_data/test_ERR4013290_2.trimmed.fastq" 
+abyss-pe name=WTZIKA k=20 in="test_ERR4013290_1.trimmed.fastq 
+                              test_ERR4013290_2.trimmed.fastq" 
+                              
+# Move files to folder
+mv WTZIKA* abyss_pe
+mv coverage* abyss_pe
+
+mkdir abyss_pe_se
+
+abyss-pe name=WTZIKA k=20 pe="test_ERR4013290_1.trimmed.fastq test_ERR4013290_2.trimmed.fastq"                              se="test_ERR4013290_1un.trimmed.fastq test_ERR4013290_2un.trimmed.fastq" 
+mv WTZIKA* abyss_pe_se
+mv coverage* abyss_pe_se
 ```
+
+Questions for Sandra: ABySS takes super long to run +2h for each pair. How can we automate it? 
+                      de novo concensus, what are the contigs?
+                      What do they mean in the protocol, first aligning to the de novo assembly                         but also aligning to a reference?
+
 
 ```{r}
 
