@@ -2,6 +2,7 @@
 title: "Delete files from list"
 #output: html_notebook
 ---
+**This notebook deletes files that were not used in the project. This includes the raw data files for the 3'_20 and 3'_30 deletion mutants. These were not used due to lack of time and would only have involved the same data processing as for both WT and 3'_10 deletion mutant.**
 
 # Build list containing files to be deleted
 This uses the output of change_file_names.Rmd
