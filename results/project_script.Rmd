@@ -123,8 +123,8 @@ bowtie2-build -f WTZIKV_FSS13025_reference.fasta test_data/QC_test_data/bowtie_i
 bowtie2 --very-sensitive-local -x test_data/QC_test_data/bowtie_index/WTZIKV -1 test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq -2 test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq \
 -U test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq, test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq \ -S test_data/QC_test_data/alignment/WTZKVIP0.sam 
 
-bowtie2 --very-sensitive-local -x all_data/QC_all_data/bowtie_index/WTZIKV -1 all_data/QC_all_data/ERR4013290_1.trimmed.fastq -2 all_data/QC_all_data/ERR4013290_2.trimmed.fastq \
--U all_data/QC_all_data/ERR4013290_1un.trimmed.fastq, all_data/QC_all_data/ERR4013290_2un.trimmed.fastq \ -S all_data/QC_all_data/alignment/WTZKVIP0.sam 
+bowtie2 --very-sensitive-local -x all_data/QC_all_data/WT_P1/bowtie_index/WTZIKV -1 all_data/QC_all_data/WT_P1/ERR4013299_1.trimmed.fastq -2 all_data/QC_all_data/WT_P1/ERR4013299_2.trimmed.fastq \
+-U all_data/QC_all_data/WT_P1/ERR4013299_1un.trimmed.fastq, all_data/QC_all_data/WT_P1/ERR4013299_2un.trimmed.fastq \ -S all_data/QC_all_data/WT_P1/alignment/WTZKVIP1.sam 
 
 ```
 
