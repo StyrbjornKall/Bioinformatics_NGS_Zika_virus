@@ -171,8 +171,8 @@ conda install -c bioconda vphaser2
 
 ```{bash}
 # Run Vphaser2 on the duplicate removed, sorted file
-vphaser2 test_data/QC_test_data/alignment/WTZKVIP0_sorted_removed_duplicates.bam \
-          variant_calling
+vphaser2 -i test_data/QC_test_data/alignment/WTZKVIP0_sorted_removed_duplicates.bam \
+          -o test_data/QC_test-data/alignment/variant_calling
 ```
 
 
@@ -180,13 +180,52 @@ vphaser2 test_data/QC_test_data/alignment/WTZKVIP0_sorted_removed_duplicates.bam
 **RF** and **bam2R** using:
 **deepSNV v1.16.0**
 
+Install deepSNV
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.10")
+
+
+BiocManager::install("deepSNV")
+```
+
+Run bam2R to produce count matrix neccessary to run RF.
+```{r}
+library(deepSNV)
+
+# No chromosome available, pass empty string as argument
+counts = bam2R(paste0(root,"data/test_data/QC_test_data/alignment/WTZKVIP0_sorted_removed_duplicates.bam"), chr = "", start = 107, stop = 10700, q = 30)
+
+```
+
+Run RF to extract relative frequencies from count matrix
+```{r}
+# Extract columns with nucleotides (exclude N/n, INS/ins, DEL/del and QUAL/qual)
+nucleotide_counts = counts[,c(1:5,12:16)]
+
+# Run RF
+relative_frequencies = RF(nucleotide_counts)
+```
+
+Calculate Shannon entropy from relative frequencies for each position in the genome. Note that the authors of the original study only use the five first columns to calculate the entropy, not the last five. 
 ```{r}
 new_entropy = function(x){
   x[1:5]
   new_entropy = -sum(x*log(x), na.rm = TRUE)
   
   return(new_entropy)}
+
+# Convert to data.frame for visualization
+shannon_entropy = as.data.frame(apply(relative_frequencies, 1, new_entropy))
 ```
+
+
+
+
+
+
+
 # Loading data
 ## Load data into R
 ```{r}
