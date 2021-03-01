@@ -1,0 +1,51 @@
+---
+title: "Delete files from list"
+#output: html_notebook
+---
+
+# Build list containing files to be deleted
+This uses the output of change_file_names.Rmd
+
+Import the file produced by change_file_names.Rmd
+```{r}
+root = "/home/student12/project/"
+
+# Load the file
+sample_metadata = read_tsv(paste0(root,"data/old_new_filenames.txt"))
+
+```
+Filter out the files to be deleted using tidyverse and export to directory.
+
+```{r}
+library(tidyverse)
+
+# Wish to remove the 3'_20 and 3'_30 mutants since not used in study
+# use grepl to find the mutants
+mutant_30 = grepl("3'_30", sample_metadata$new_file_names)
+mutant_20 = grepl("3'_20", sample_metadata$new_file_names)
+
+# Use dplyr's filter to produce a data.frame containing the files to be deleted
+files_to_be_deleted = dplyr::filter(sample_metadata, mutant_30 | mutant_20)
+
+# View files
+head(files_to_be_deleted)
+```
+
+# Export file
+Export the data.frame using write.table to the data directory. This is imortant since this file now keeps track of which files that have been deleted.
+```{r}
+write.table(files_to_be_deleted, paste0(root, "data/","files_to_be_deleted.txt"), sep="\t",row.names=FALSE)
+```
+
+# Delete files [Optional]
+Delete the files contained in the exported data.frame.
+
+```{r}
+# Set working directory to directory containing files
+path_to_files = setwd(paste0(root,"data/all_data/"))
+
+# Uncomment if desired to delete, there is no way of recovering the deleted files
+#file.remove(files_to_be_deleted[,1])
+
+```
+
