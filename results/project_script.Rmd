@@ -3,6 +3,9 @@ title: "Project outline"
 output: html_notebook
 ---
 
+# Instructions
+This script is written for a test data set and can be run from start (QC preprocessing) to finish (Shannon entropy calculation). The test data set is generated in the data_acquisition.Rmd script and consist of a pair-end read for WTZIKV P0. The script is written so that it is run with the data directory as its working directory.
+
 # QC Preprocessing
 - **Original study:** Trimmomatic v0.22
 - **Reproduction:** Trimmomatic v0.39
@@ -29,12 +32,12 @@ conda install -c bioconda fastqc
 
 Run fastQC software to inspect data. This will generate a .fastqc.zip file and a .html file which can be opened in a browser through Rstudio. This will show basic statistics for the read, including its average quality score across reads.
 ```{bash}
-fastqc test_data/TEST_FILE
+fastqc test_data/test_ERR4013290_1.fastq
 ```
 
-Trimming and quality control may now be performed using Trimmomatic v0.39. 
+Trimming and quality control may now be performed using Trimmomatic v0.39. Make new QC directory to facilitate trimmomatic output.
 ```{bash}
-mkdir QC_test_data
+mkdir test_data/QC_test_data
 
 trimmomatic PE -threads 4 test_ERR4013290_1.fastq test_ERR4013290_2.fastq  \
 QC_test_data/test_ERR4013290_1.trimmed.fastq QC_test_data/test_ERR4013290_1un.trimmed.fastq \
@@ -42,7 +45,12 @@ QC_test_data/test_ERR4013290_2.trimmed.fastq QC_test_data/test_ERR4013290_2un.tr
 TRAILING:35 MINLEN:35
 ```
 
-# de novo assembly
+Optional: run fastQC again to view the trimmed data.
+```{bash}
+fastqc test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq
+```
+
+# *de novo* assembly
 - **Original study:** ABySS v1.3.7
 - **Reproduction:** ABySS v2.2.5
 
@@ -51,27 +59,31 @@ ABySS is an assembler intended for short read data, such as the data generated b
 conda install -c bioconda abyss
 ```
 
-Run ABySS on the quality trimmed data
+Run ABySS on the quality trimmed data. Make new directory to facilitate the big output from ABySS. ABySS can be run with either only the remaining pairs that survived the trimming or both the pairs and the remaining single reads. The last option does not generate a contigs.fa file and is therefore in some way erroneous.
 ```{bash}
-mkdir abyss_pe
-abyss-pe name=WTZIKA k=30 in="test_ERR4013290_1.trimmed.fastq 
-                              test_ERR4013290_2.trimmed.fastq" 
+mkdir test_data/QC_test_data/abyss_pe
+abyss-pe name=WTZIKA k=30 in="test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq 
+                              test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq" 
                               
 # Move files to folder
-mv WTZIKA* abyss_pe
-mv coverage* abyss_pe
+mv test_data/QC_test_data/WTZIKA* test_data/QC_test_data/abyss_pe
+mv test_data/QC_test_data/coverage* test_data/QC_test_data/abyss_pe
 
-# Alternitavely: also include the single reads "un paired"
-mkdir abyss_pe_se
-abyss-pe name=WTZIKA k=30 pe="test_ERR4013290_1.trimmed.fastq test_ERR4013290_2.trimmed.fastq"                              se="test_ERR4013290_1un.trimmed.fastq test_ERR4013290_2un.trimmed.fastq" 
-mv WTZIKA* abyss_pe_se
-mv coverage* abyss_pe_se
+# Alternitavely: also include the single reads "un paired", this is erroneous
+mkdir test_data/QC_test_data/abyss_pe_se
+
+abyss-pe name=WTZIKA k=30 pe="test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq 
+                              test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq" \                                                                     se="test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq       
+                              test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq" 
+# Move files to folder
+mv test_data/QC_test_data/WTZIKA* test_data/QC_test_data/abyss_pe_se
+mv test_data/QC_test_data/coverage* test_data/QC_test_data/abyss_pe_se
 ```
 
 The output from the assembly is not sufficient for aligning since it does not consist of a single string (a genome). Therefore, the *de novo* sequences are not used further. Moving directly from here to Alignment with the *de novo* sequences replaced by a reference genome instead for the wild type strain.
 
 # SKIPPED: Disassembly BAM files
-**SamToFastq.jar** and **SAMtools**
+- **Original study:** SamToFastq.jar and SAMtools
 This step is only used if the ABySS software runs successfully. Therefore, this is skipped in the reproduction.
 
 # Alignment
@@ -108,10 +120,13 @@ bowtie2-build -f WTZIKV_FSS13025_reference.fasta test_data/QC_test_data/bowtie_i
 Run bowtie2 on the quality trimmed data.
 ```{bash}
 # Run bowtie2 on both paired trimmed reads (-1 and -2) and on unpaired trimmed reads (-U)
-bowtie2 --very-sensitive-local -x test_data/QC_test_data/bowtie_index/WTZIKV -1 test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq -2 test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq \
--U test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq, test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq \ -S test_data/QC_test_data/alignment/WTZKVIP0.sam 
+bowtie2 --very-sensitive-local -x \
+test_data/QC_test_data/bowtie_index/WTZIKV \
+-1 test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq \
+-2 test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq \
+-U test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq, test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq \
+-S test_data/QC_test_data/alignment/WTZKVIP0.sam 
 
-bowtie2 --very-sensitive-local -x QC_all_data/WT_P0/bowtie_index/WTZIKV -1  QC_all_data/WT_P0/ERR4013290_1.trimmed.fastq -2 QC_all_data/WT_P0/ERR4013290_2.trimmed.fastq -U  QC_all_data/WT_P0/ERR4013290_1un.trimmed.fastq, QC_all_data/WT_P0/ERR4013290_2un.trimmed.fastq -S  QC_all_data/WT_P0/alignment/WT_P0.sam
 ```
 
 
@@ -161,7 +176,7 @@ samtools view test_data/QC_test_data/alignment/WTZKVIP0_sorted_removed_duplicate
 
 # Variant detection
 - **Original study:** V-phaser2 v2.0
-- **Original study:** V-phaser2 v2.0
+- **Reproduciton:** V-phaser2 v2.0
 
 This will aim to find all SNP:s present in the data. The software used is called V-phaser2 and finds potential SNP:s and their corresponding p-values. The p-values are corrected for FDR directly by the software.
 ```{bash}
