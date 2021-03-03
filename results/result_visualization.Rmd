@@ -30,8 +30,8 @@ colnames(shannon_entropies) = column_names
 
 ```
 
-# Visualize
-
+# Shannon Entropy
+## Mean Shannon Entropy with standard error of the mean
 ```{r}
 # Calculate standard error of the mean
 standard_error = function(x) sd(x) / sqrt(length(x))
@@ -40,7 +40,9 @@ standard_error = function(x) sd(x) / sqrt(length(x))
 mean_entropies = sapply(shannon_entropies, mean)
 se = sapply(shannon_entropies, standard_error)
 x = 1:6
+```
 
+```{r}
 # plot the means and se
 plot(x, mean_entropies,
     ylim=range(c(mean_entropies-se, mean_entropies+se)),
@@ -50,12 +52,13 @@ arrows(x, mean_entropies-se, x, mean_entropies+se, length=0.05, angle=90, code=3
 
 ```
 
-```{r}
-plot(mean_entropies, main = "Mean entropy in WT ZIKV passage 0-5", xlab = "passage", ylab = "mean Shannon entropy", type = "l")
-```
+
+## Mean Shannon Entropy and coverage
 
 
-
+# SNV
+## Common SNVs across all passages
+##they made it in excel but I hope there is a way to do so in R 
 
 
 
