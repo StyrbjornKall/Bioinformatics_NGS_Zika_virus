@@ -1,3 +1,4 @@
+  
 ---
 title: "Project outline"
 #output: html_notebook
@@ -15,16 +16,12 @@ The trimming and quality control is done by using the software Trimmomatic. The 
 ```{bash}
 # Initiate conda
 source ~/.bashrc
-
 # create new conda environment
 conda create --name project
-
 # activate conda environment
 conda activate project
-
 # Check current packages
 conda list
-
 # Install packages
 conda install -c bioconda trimmomatic
 conda install -c bioconda fastqc
@@ -38,7 +35,6 @@ fastqc test_data/test_ERR4013290_1.fastq
 Trimming and quality control may now be performed using Trimmomatic v0.39. Make new QC directory to facilitate trimmomatic output.
 ```{bash}
 mkdir test_data/QC_test_data
-
 trimmomatic PE -threads 4 test_ERR4013290_1.fastq test_ERR4013290_2.fastq  \
 QC_test_data/test_ERR4013290_1.trimmed.fastq QC_test_data/test_ERR4013290_1un.trimmed.fastq \
 QC_test_data/test_ERR4013290_2.trimmed.fastq QC_test_data/test_ERR4013290_2un.trimmed.fastq \
@@ -68,10 +64,8 @@ abyss-pe name=WTZIKA k=30 in="test_data/QC_test_data/test_ERR4013290_1.trimmed.f
 # Move files to folder
 mv test_data/QC_test_data/WTZIKA* test_data/QC_test_data/abyss_pe
 mv test_data/QC_test_data/coverage* test_data/QC_test_data/abyss_pe
-
 # Alternitavely: also include the single reads "un paired", this is erroneous
 mkdir test_data/QC_test_data/abyss_pe_se
-
 abyss-pe name=WTZIKA k=30 pe="test_data/QC_test_data/test_ERR4013290_1.trimmed.fastq 
                               test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq" \                                                                     se="test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq       
                               test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq" 
@@ -98,12 +92,9 @@ Bowtie2 uses a different version of python than the one used by trimmomatic, the
 
 ```{bash}
 conda deactivate
-
 # Create new environment
 conda create --name project_downstream
-
 conda activate project_downstream
-
 # Install Bowtie2
 conda install bowtie2
 ```
@@ -112,7 +103,6 @@ Make new directories to facilitate bowtie alignment as well as the generated bow
 ```{bash}
 mkdir test_data/QC_test_data/bowtie_index
 mkdir test_data/QC_test_data/alignment
-
 # Build index for reference genome
 bowtie2-build -f WTZIKV_FSS13025_reference.fasta test_data/QC_test_data/bowtie_index/WTZIKV
 ```
@@ -126,7 +116,6 @@ test_data/QC_test_data/bowtie_index/WTZIKV \
 -2 test_data/QC_test_data/test_ERR4013290_2.trimmed.fastq \
 -U test_data/QC_test_data/test_ERR4013290_1un.trimmed.fastq, test_data/QC_test_data/test_ERR4013290_2un.trimmed.fastq \
 -S test_data/QC_test_data/alignment/WTZKVIP0.sam 
-
 ```
 
 
@@ -182,7 +171,6 @@ This will aim to find all SNP:s present in the data. The software used is called
 ```{bash}
 # Make a new directory for storing the Vphaser output
 mkdir test_data/QC_test_data/alignment/variant_calling
-
 # Install Vphaser2
 conda install -c bioconda vphaser2
 ```
@@ -205,7 +193,6 @@ Install deepSNV into R. Note: The R version of the reproduction is 3.6 and does 
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install(version = "3.10")
-
 # Install deepSNV
 BiocManager::install("deepSNV")
 ```
@@ -213,20 +200,16 @@ BiocManager::install("deepSNV")
 Run bam2R to produce count matrix. Run from start position 107 to position 10700 and quality threshold 30, as per instructed by original study.
 ```{r}
 library(deepSNV)
-
 # Define path to file
 path_to_file = "/home/student12/project/data/test_data/QC_test_data/alignment/"
-
 # No chromosome available, pass empty string as argument
 counts = bam2R(paste0(path_to_file, "WTZKVIP0_sorted_removed_duplicates.bam"), chr = "", start = 107, stop = 10700, q = 30)
-
 ```
 
 Run RF to extract relative frequencies from count matrix. Extract the columns containing nucleotide information.
 ```{r}
 # Extract columns with nucleotides (exclude N/n, INS/ins, DEL/del and QUAL/qual)
 nucleotide_counts = counts[,c(1:5,12:16)]
-
 # Run RF
 relative_frequencies = RF(nucleotide_counts)
 ```
@@ -239,7 +222,6 @@ new_entropy = function(x){
   new_entropy = -sum(x*log(x), na.rm = TRUE)
   
   return(new_entropy)}
-
 # Convert to data.frame for visualization
 shannon_entropy = as.data.frame(apply(relative_frequencies, 1, new_entropy))
 ```
@@ -251,7 +233,6 @@ Copy the file containing information about the SNP:s. Take the file that has bee
 ```{bash}
 # Make new directory in results for storing all SNPs
 mkdir /home/student12/project/results/SNP
-
 # Find the file in the data directory and copy it to the new folder
 cp `find test_data/QC_test_data/alignment/variant_calling -type f -name "*.fdr.var.txt"` /home/student12/project/results/SNP/test_SNP_WT_P0.fdr.var.txt
 ```
@@ -268,7 +249,6 @@ Save the Shannon entropy data.frame.
 ```{r}
 path_to_save = "/home/student12/project/results/shannon_entropy/"
 shannon_file_name = "test_WT_P0.txt"
-
 write.table(shannon_entropy, paste0(path_to_save, shannon_file_name))
 ```
 
@@ -277,44 +257,105 @@ write.table(shannon_entropy, paste0(path_to_save, shannon_file_name))
 
 ############################### WT_P0 #######################################
 ```{bash}
-
 mkdir /home/student12/project/data/all_data/QC_all_data/WT_P0
-
-
-
 trimmomatic PE -threads 4 ERR4013290_1.fastq ERR4013290_2.fastq  \
               QC_all_data/WT_P0/ERR4013290_1.trimmed.fastq                         QC_all_data/WT_P0/ERR4013290_1un.trimmed.fastq \
               QC_all_data/WT_P0/ERR4013290_2.trimmed.fastq QC_all_data/WT_P0/ERR4013290_2un.trimmed.fastq \
               TRAILING:35 MINLEN:35
               
 fastqc QC_all_data/WT_P0/ERR4013290_1.trimmed.fastq
-
 mkdir /home/student12/project/data/all_data/QC_all_data/WT_P0/bowtie_index
 mkdir /home/student12/project/data/all_data/QC_all_data/WT_P0/alignment
-
 bowtie2-build -f WTZIKV_FSS13025_reference.fasta all_data/QC_all_data/WT_P0/bowtie_index/WTZIKV
-
 bowtie2 --very-sensitive-local -x QC_all_data/WT_P0/bowtie_index/WTZIKV -1  QC_all_data/WT_P0/ERR4013290_1.trimmed.fastq -2 QC_all_data/WT_P0/ERR4013290_2.trimmed.fastq -U  QC_all_data/WT_P0/ERR4013290_1un.trimmed.fastq, QC_all_data/WT_P0/ERR4013290_2un.trimmed.fastq -S  QC_all_data/WT_P0/alignment/WT_P0.sam 
-
 samtools view -S -b QC_all_data/WT_P0/alignment/WT_P0.sam > QC_all_data/WT_P0/alignment/WT_P0.bam  
-
 picard SortSam \
       I=QC_all_data/WT_P0/alignment/WT_P0.bam \
       O=QC_all_data/WT_P0/alignment/WT_P0_sorted.bam \
       SORT_ORDER=coordinate
-
 samtools view QC_all_data/WT_P0/alignment/WT_P0_sorted.bam | less -S
-
 picard MarkDuplicates \
       I=QC_all_data/WT_P0/alignment/WT_P0_sorted.bam \
       O=QC_all_data/WT_P0/alignment/WT_P0_sorted_removed_duplicates.bam \
       M=QC_all_data/WT_P0/alignment/WT_P0_sorted_removed_dup_metrics.txt \
       REMOVE_DUPLICATES=true
-
 samtools view QC_all_data/WT_P0/alignment/WT_P0_sorted_removed_duplicates.bam | less -S
-
 vphaser2 -i QC_all_data/WT_P0/alignment/WT_P0_sorted_removed_duplicates.bam -o QC_all_data/WT_P0/variant_calling/WT_P0_SNP \          
 variant_calling
             
 ```
+
+
+
+
+############################### 10D_P0 #######################################
+```{bash}
+mkdir /home/student12/project/data/all_data/QC_all_data/10D_P3
+
+trimmomatic PE -threads 4 ERR4013304_1.fastq ERR4013304_2.fastq  \
+              QC_all_data/10D_P3/ERR4013304_1.trimmed.fastq                         QC_all_data/10D_P3/ERR4013304_1un.trimmed.fastq \
+              QC_all_data/10D_P3/ERR4013304_2.trimmed.fastq QC_all_data/10D_P3/ERR4013304_2un.trimmed.fastq \
+              TRAILING:35 MINLEN:35
+              
+fastqc QC_all_data/10D_P3/ERR4013304_1.trimmed.fastq
+mkdir /home/student12/project/data/all_data/QC_all_data/10D_P3/bowtie_index
+mkdir /home/student12/project/data/all_data/QC_all_data/10D_P3/alignment
+bowtie2-build -f WTZIKV_FSS13025_reference.fasta all_data/QC_all_data/10D_P3/bowtie_index/WTZIKV
+bowtie2 --very-sensitive-local -x QC_all_data/10D_P3/bowtie_index/WTZIKV -1  QC_all_data/10D_P3/ERR4013304_1.trimmed.fastq -2 QC_all_data/10D_P3/ERR4013304_2.trimmed.fastq -U  QC_all_data/10D_P3/ERR4013304_1un.trimmed.fastq, QC_all_data/10D_P3/ERR4013304_2un.trimmed.fastq -S  QC_all_data/10D_P3/alignment/10D_P3.sam 
+samtools view -S -b QC_all_data/10D_P3/alignment/10D_P3.sam > QC_all_data/10D_P3/alignment/10D_P3.bam  
+picard SortSam \
+      I=QC_all_data/10D_P3/alignment/10D_P3.bam \
+      O=QC_all_data/10D_P3/alignment/10D_P3_sorted.bam \
+      SORT_ORDER=coordinate
+samtools view QC_all_data/10D_P3/alignment/10D_P3_sorted.bam | less -S
+picard MarkDuplicates \
+      I=QC_all_data/10D_P3/alignment/10D_P3_sorted.bam \
+      O=QC_all_data/10D_P3/alignment/10D_P3_sorted_removed_duplicates.bam \
+      M=QC_all_data/10D_P3/alignment/10D_P3_sorted_removed_dup_metrics.txt \
+      REMOVE_DUPLICATES=true
+samtools view QC_all_data/10D_P3/alignment/10D_P3_sorted_removed_duplicates.bam | less -S
+
+
+mkdir /home/student12/project/data/all_data/QC_all_data/10D_P3/alignment/variant_calling
+
+vphaser2 -i /home/student12/project/data/all_data/QC_all_data/10D_P3/alignment/10D_P3_sorted_removed_duplicates.bam -o /home/student12/project/data/all_data/QC_all_data/10D_P3/alignment/variant_calling
+
+
+```
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.10")
+# Install deepSNV
+BiocManager::install("Rsamtools")
+BiocManager::install("VariantAnnotation")
+BiocManager::install("deepSNV")
+```
+```{r}
+
+library(deepSNV)
+path_to_file = "/home/student12/project/data/all_data/QC_all_data/10D_P3/alignment/"
+counts = bam2R(paste0(path_to_file, "10D_P3_sorted_removed_duplicates.bam"), chr = "", start = 107, stop = 10700, q = 30)
+
+nucleotide_counts = counts[,c(1:5,12:16)]
+relative_frequencies = RF(nucleotide_counts)
+new_entropy = function(x){
+  x[1:5]
+  new_entropy = -sum(x*log(x), na.rm = TRUE)
+  
+  return(new_entropy)}
+
+shannon_entropy = as.data.frame(apply(relative_frequencies, 1, new_entropy))
+```
+```{bash}
+
+cp `find all_data/QC_all_data/10D_P3/alignment/variant_calling -type f -name "*.fdr.var.txt"` /home/student12/project/results/SNP/SNP_10D_P3.fdr.var.txt
+```
+```{r}
+path_to_save = "/home/student12/project/results/shannon_entropy/"
+shannon_file_name = "10D_P3.txt"
+write.table(shannon_entropy, paste0(path_to_save, shannon_file_name))
+```
+
 
