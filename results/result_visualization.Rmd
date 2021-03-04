@@ -11,7 +11,7 @@ path_to_shannon_files = "~student12/project/results/shannon_entropy/"
 library(tidyverse)
 
 # List the data
-file_list = list.files(path_to_shannon_files, pattern = "shannon_WT" ,full.names = TRUE)
+file_list = list.files(path_to_shannon_files, pattern = "shannon_" ,full.names = TRUE)
 
 column_names = c()
 shannon_entropies = data.frame()
@@ -44,21 +44,52 @@ x = 1:6
 
 ```{r}
 # plot the means and se
-plot(x, mean_entropies,
-    ylim=range(c(mean_entropies-se, mean_entropies+se)),
+par(mfrow = c(1,2), fig=c(0.1,0.7,0.3,0.9)) 
+plot(x, mean_entropies[1:6],
+    ylim=range(c(mean_entropies[1:6]-se[1:6], mean_entropies[1:6]+se[1:6])),
     pch=19, xlab="Passage", ylab="Mean Shannon entropy +/- SD",
     main="Mean entropy in WT ZIKV passage 0-5")
-arrows(x, mean_entropies-se, x, mean_entropies+se, length=0.05, angle=90, code=3)
+arrows(x, mean_entropies[1:6]-se[1:6], x, mean_entropies[1:6]+se[1:6], length=0.05, angle=90, code=3)
+plot(x, mean_entropies[7:12],
+    ylim=range(c(mean_entropies[7:12]-se[7:12], mean_entropies[7:12]+se[7:12])),
+    pch=19, xlab="Passage", ylab="Mean Shannon entropy +/- SD",
+    main="Mean entropy in WT ZIKV passage 0-5")
+arrows(x, mean_entropies[7:12]-se[7:12], x, mean_entropies[7:12]+se[7:12], length=0.05, angle=90, code=3)
 
 ```
 
 
 ## Mean Shannon Entropy and coverage
 
+```{r}
+
+```
 
 # SNV
 ## Common SNVs across all passages
-##they made it in excel but I hope there is a way to do so in R 
+
+
+```{bash}
+  grep -v "#" SNP_WT_P1.fdr.var.txt | cut -f | cut -f  > modified_SNP_WT_P1.fdr.var.txt
+  grep -v "#" SNP_WT_P2.fdr.var.txt > modified_SNP_WT_P2.fdr.var.txt
+  grep -v "#" SNP_WT_P3.fdr.var.txt > modified_SNP_WT_P3.fdr.var.txt
+  grep -v "#" SNP_WT_P4.fdr.var.txt > modified_SNP_WT_P4.fdr.var.txt
+  grep -v "#" SNP_WT_P5.fdr.var.txt > modified_SNP_WT_P5.fdr.var.txt
+```
+```{r}
+
+path_to_SNP_files ="/home/student12/project/results/SNP"
+
+all_files = list.files(path_to_SNP_files, pattern ="modified_", full.names = TRUE)
+# read in all the CSV files
+all_data_frames <- lapply(all_files, function(x){
+  read.csv(x,header = FALSE, sep="\t") } )
+# stack all data frames together
+single_data_frame <- Reduce(rbind, all_data_frames)
+
+```
+
+
 
 
 
