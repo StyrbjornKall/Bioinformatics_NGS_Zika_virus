@@ -86,7 +86,7 @@ library(tidyverse)
 ##First we need to obtain under the format of data.frame all the SNVs for each passage.
 
 #set the path of the files :
-path_to_SNP_files ="/home/student6/ProjectZIKA/team_project/results/SNP"
+path_to_SNP_files ="/home/student12/project/results/SNP"
 #identifying all the files needed :
 all_files = list.files(path_to_SNP_files, pattern ="modified_", full.names = TRUE)
 # read in all the CSV files :
@@ -106,7 +106,7 @@ mutation_of_interest <- filter(single_data_frame, Frequency >= 5) %>%
 mutation_of_interest <- arrange(mutation_of_interest, desc(Position)) 
 mutation_of_interest <- distinct(mutation_of_interest, Position, .keep_all = TRUE)
 
-ggplot(single_data_frame, x = Passage, y= Frequency)
+ggplot(single_data_frame, aes(x = Passage, y= Frequency)) + labs
 #identify the common mutations in the genome
 #common_mutation = map(all_data_frames, ~.$Position ) %>%
 #  reduce(intersect)
