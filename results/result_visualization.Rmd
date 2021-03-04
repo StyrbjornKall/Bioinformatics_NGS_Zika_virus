@@ -74,11 +74,16 @@ x = list.files(pattern = "*.R", recursive = TRUE)
 
 
 ```{bash}
+
+### Processing WT files :
+  grep -v "#" SNP_WT_P0.fdr.var.txt | cut -f 1,6  > modified_SNP_WT_P0.fdr.var.txt
   grep -v "#" SNP_WT_P1.fdr.var.txt | cut -f 1,6  > modified_SNP_WT_P1.fdr.var.txt
   grep -v "#" SNP_WT_P2.fdr.var.txt |cut -f 1,6> modified_SNP_WT_P2.fdr.var.txt
   grep -v "#" SNP_WT_P3.fdr.var.txt |cut -f 1,6> modified_SNP_WT_P3.fdr.var.txt
   grep -v "#" SNP_WT_P4.fdr.var.txt |cut -f 1,6> modified_SNP_WT_P4.fdr.var.txt
   grep -v "#" SNP_WT_P5.fdr.var.txt |cut -f 1,6> modified_SNP_WT_P5.fdr.var.txt
+  
+### Processing 10_D files :
 ```
 ```{r}
 library(tidyverse)
@@ -88,36 +93,33 @@ library(tidyverse)
 #set the path of the files :
 path_to_SNP_files ="/home/student12/project/results/SNP"
 #identifying all the files needed :
-all_files = list.files(path_to_SNP_files, pattern ="modified_", full.names = TRUE)
+all_WT_files = list.files(path_to_SNP_files, pattern ="modified_SNP_WT_", full.names = TRUE)
+all_10D_files = list.files(path_to_SNP_files, pattern ="modified_SNP_10D_", full.names = TRUE)
+
 # read in all the CSV files :
-all_data_frames <- lapply(all_files, function(x){
+all_data_frames_WT <- lapply(all_WT_files, function(x){
   read.csv(x,header = FALSE, sep="\t") } )
 #We modify the name of the columns to identify position and frequency, then we create a new collumn containing the number of the passage for each SNV. This will help us later to plot every SNVs by group.
-for (i in 1:5) {
-  colnames(all_data_frames[[i]]) <- c("Position","Frequency")
-  all_data_frames[[i]] <- mutate(all_data_frames[[i]], Passage = i )
+for (i in 1:6) {
+  colnames(all_data_frames_WT[[i]]) <- c("Position","Frequency")
+  all_data_frames_WT[[i]] <- mutate(all_data_frames_WT[[i]], Passage = i-1 )
 }
 #We can now reduce our 5 data frames in one.
-single_data_frame <- Reduce(rbind, all_data_frames)
-
+single_data_frame_WT <- Reduce(rbind, all_data_frames_WT)
+single_data_frame_WT$Passage <- as.factor(single_data_frame_WT$Passage)
 #We now can identify and plot on the map of the genome the mutations that appears in one or multiple passages at a frequency of 5% or more in the viral population. We then remove the duplicates or more : 
 
-mutation_of_interest <- filter(single_data_frame, Frequency >= 5) %>%
-mutation_of_interest <- arrange(mutation_of_interest, desc(Position)) 
-mutation_of_interest <- distinct(mutation_of_interest, Position, .keep_all = TRUE)
+mutation_of_interest_WT <- filter(single_data_frame_WT, Frequency >= 5) 
+mutation_of_interest_WT <- arrange(mutation_of_interest_WT, desc(Position)) 
+mutation_of_interest_WT <- distinct(mutation_of_interest_WT, Position, .keep_all = TRUE)
 
-ggplot(single_data_frame, aes(x = Passage, y= Frequency)) + labs
+ggplot(single_data_frame_WT, aes(x = Passage, y= Frequency)) + 
+  geom_boxplot() + 
+  geom_point(position = "jitter") +
+  labs(x = "Passage", y = "SNV Frequency (%)")
 #identify the common mutations in the genome
 #common_mutation = map(all_data_frames, ~.$Position ) %>%
 #  reduce(intersect)
-
-#for (i in 1:5){
-#  all_data_frames[[i]] %>%
-#    filter(Frequency >= 5.0)%>%
-#    arrange(desc(Position))
-#}
-#plot the map of the genome :
-#plot the SNPs per passage and the frequencies : 
 ```
 
 
