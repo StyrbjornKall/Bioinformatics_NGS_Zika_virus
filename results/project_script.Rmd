@@ -125,7 +125,7 @@ test_data/QC_test_data/bowtie_index/WTZIKV \
 - **Reproduction:** SAMtools v1.11
 - **Reproduction:** Picard-tools v2.18.7
 
-Install packages using conda. These are neccessary to convert the alignment .sam file from bowtie2 to a binary format (.bam) and to sort the .bam file by coordinate in the genome. This in turn is neccessary in order to find duplicates from the PCR amplification later and for calling SNPs. 
+Install packages using conda. These are necessary to convert the alignment .sam file from bowtie2 to a binary format (.bam) and to sort the .bam file by coordinate in the genome. This in turn is necessary in order to find duplicates from the PCR amplification later and for calling SNPs. 
 ```{bash}
 conda install -c bioconda samtools
 conda install -c bioconda picard
@@ -237,6 +237,11 @@ mkdir /home/student12/project/results/SNP
 cp `find test_data/QC_test_data/alignment/variant_calling -type f -name "*.fdr.var.txt"` /home/student12/project/results/SNP/test_SNP_WT_P0.fdr.var.txt
 ```
 
+Copy coverage .R scripts to result folder as well since this will be used for visualization.
+```{bash}
+cp `find test_data/QC_test_data/alignment/variant_calling -type f -name "*.R"` /home/student12/project/results/SNP/test_SNP_WT_P0.cov.R
+```
+
 
 **Shannon entropy**
 
@@ -255,6 +260,8 @@ write.table(shannon_entropy, paste0(path_to_save, shannon_file_name))
 
 
 
+<<<<<<< HEAD
+=======
 ############################### WT_P0 #######################################
 ```{bash}
 mkdir /home/student12/project/data/all_data/QC_all_data/WT_P0
@@ -363,3 +370,4 @@ write.table(shannon_entropy, paste0(path_to_save, shannon_file_name))
 ```
 
 
+>>>>>>> 9770809bb3608b8894c0a9447c3f65c7a7e822ab
