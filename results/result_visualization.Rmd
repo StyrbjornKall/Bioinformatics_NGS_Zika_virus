@@ -39,7 +39,7 @@ standard_error = function(x) sd(x) / sqrt(length(x))
 # Calculate mean entropy and standard error of the mean
 mean_entropies = sapply(shannon_entropies, mean)
 se = sapply(shannon_entropies, standard_error)
-x = 1:6
+x = 0:5
 ```
 
 ```{r}
@@ -62,12 +62,53 @@ arrows(x, mean_entropies[7:12]-se[7:12], x, mean_entropies[7:12]+se[7:12], lengt
 ## Mean Shannon Entropy and coverage
 
 ```{r}
-x = list.files(pattern = "*.R", recursive = TRUE)
+
+path_to_SNP_files = "~student12/project/results/SNP/"
+
+# List the data
+cov_file_list = list.files(path_to_SNP_files, pattern = "covplot.R" ,full.names = TRUE)
+
+column_names = c()
+coverage = data.frame()
+
+# Load the data in the folder
+for (file in cov_file_list){
+  
+  column_names = cbind(column_names, tools::file_path_sans_ext(basename(file)))
+  # Read the file
+  source(file)
+  # variable y is the vector containing the coverage in the file
+  coverage = rbind(coverage, y)
+  
+}
+
+# Needing to transpose data and rename columns
+coverage = as.data.frame(t(as.matrix(coverage)))
+colnames(coverage) = column_names
+
+```
 
 
+```{r}
+# Find mean coverage and se
+mean_coverage = sapply(coverage, mean)
+se_cov = sapply(coverage, standard_error)
+```
+
+```{r}
+# Combine the mean coverage and mean entropies for convenience
+cov_shannon = as.data.frame(cbind(mean_coverage, mean_entropies))
+
+# Replace the rownames with only the strain and passage
+row_names = str_replace(rownames(cov_shannon), "SNP_","") %>% str_replace(".covplot","")
+rownames(cov_shannon) = row_names
+```
+
+```{r}
 
 
 ```
+
 
 # SNV
 ## Common SNVs across all passages
