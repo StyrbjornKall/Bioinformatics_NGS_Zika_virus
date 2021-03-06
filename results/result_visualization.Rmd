@@ -6,9 +6,9 @@ output: html_document
 
 ## Instructions :
 
-This notebook presents all the codes used to analyze and plot the data obtained previously. The files used have been previously moved into the folder results.
+This notebook presents all the codes used to analyze and visualize the results obtained previously. The files used have been previously moved into the folder results thanks to the script project_script.Rmd .
 
-This script is divided into two sections, and each section correspond to a figure of the repport :
+This script is divided into two sections, and each section correspond to a figure of the report :
 
 * **Shannon Entropy** :
   + Mean Shannon Entropy per passage per strain (figure 2)

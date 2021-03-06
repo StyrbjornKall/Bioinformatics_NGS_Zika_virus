@@ -3,8 +3,15 @@ title: "Data Acquisition"
 #output: html_document
 ---
 
+**This notebook download and unzip the data files from ArrayExpress (https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-8905/samples/?query=zika)**
+
+* **Input** : txt file downloaded from ArrayExpress containing the list of the data to acquire.
+* **Output** : folder all_data containing all the unzipped data files
+
 # Data acquisition 
+
 ## Acquire data
+
 Here we fetch all data from ArrayExpress
 ```{bash}
 # Make data directory
@@ -27,6 +34,7 @@ mv *.fastq all_data
 ```
 
 ## Prepare test data set
+
 Here we prepare a test set on which this script can be tested. The test set is much smaller than the real data set and consists of two samples corresponding to one strain's two paired reads.
 
 ```{bash}
