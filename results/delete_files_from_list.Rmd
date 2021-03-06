@@ -4,8 +4,8 @@ title: "Delete files from list"
 ---
 **This notebook deletes files that were not used in the project. This includes the raw data files for the 3'_20 and 3'_30 deletion mutants. These were not used due to lack of time and would only have involved the same data processing as for both WT and 3'_10 deletion mutant.**
 
-* **Input** : simplified_metadata.txt 
-* **Output** : file_to_be_deleted.txt (list of the files deleted, to keep track of what we have deleted)
+- **Input** : simplified_metadata.txt 
+- **Output** : deleted_files.txt (list of the files deleted, to keep track of what we have deleted)
 
 # Build list containing files to be deleted
 This uses the output of change_file_names.Rmd
@@ -29,7 +29,7 @@ mutant_30 = grepl("3'_30", sample_metadata$new_file_names)
 mutant_20 = grepl("3'_20", sample_metadata$new_file_names)
 
 # Use dplyr's filter to produce a data.frame containing the files to be deleted
-files_to_be_deleted = dplyr::filter(sample_metadata, mutant_30 | mutant_20)
+deleted_files = dplyr::filter(sample_metadata, mutant_30 | mutant_20)
 
 # View files
 head(files_to_be_deleted)
@@ -38,7 +38,7 @@ head(files_to_be_deleted)
 # Export file
 Export the data.frame using write.table to the data directory. This is imortant since this file now keeps track of which files that have been deleted.
 ```{r}
-write.table(files_to_be_deleted, paste0(root, "data/","files_to_be_deleted.txt"), sep="\t",row.names=FALSE)
+write.table(deleted_files, paste0(root, "data/","deleted_files.txt"), sep="\t",row.names=FALSE)
 ```
 
 # Delete files [Optional]
@@ -49,7 +49,7 @@ Delete the files contained in the exported data.frame.
 path_to_files = setwd(paste0(root,"data/all_data/"))
 
 # Uncomment if desired to delete, there is no way of recovering the deleted files
-#file.remove(dplyr::pull(files_to_be_deleted,1))
+#file.remove(dplyr::pull(deleted_files,1))
 
 ```
 

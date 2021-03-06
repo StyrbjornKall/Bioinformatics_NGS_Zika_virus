@@ -1,14 +1,11 @@
 ---
 title: "Result visualization"
-output: html_document
+#output: html_document
 ---
 
+**This notebook presents all the codes used to analyze and visualize the results obtained from the study_pipeline.Rmd. The files used have been previously moved into the folder results thanks to the script project_script.Rmd.**
 
-## Instructions :
-
-This notebook presents all the codes used to analyze and visualize the results obtained previously. The files used have been previously moved into the folder results thanks to the script project_script.Rmd .
-
-This script is divided into two sections, and each section correspond to a figure of the report :
+**This script is divided into two sections, and each section correspond to a figure of the report:**
 
 * **Shannon Entropy** :
   + Mean Shannon Entropy per passage per strain (figure 2)

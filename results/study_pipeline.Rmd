@@ -1,11 +1,12 @@
-  
 ---
-title: "Project outline"
+title: "Study Pipeline"
 #output: html_notebook
 ---
 
-# Instructions
-This script is written for a test data set and can be run from start (QC preprocessing) to finish (Shannon entropy calculation). The test data set is generated in the data_acquisition.Rmd script and consist of a pair-end read for WTZIKV P0. The script is written so that it is run with the data directory as its working directory.
+**This script is written for a test data set and can be run from start (QC preprocessing) to finish (Shannon entropy calculation). The test data set is generated in the data_acquisition.Rmd script and consist of a pair-end read for WTZIKV P0. The script is written so that it is run with the data directory as its working directory.**
+
+- **Input** : the test data files 
+- **Output** : outputs from the softwares and most important a .txt file of the SNVs and a .R file of the coverage and .txt files of the calculated Shannon entropies
 
 # QC Preprocessing
 - **Original study:** Trimmomatic v0.22

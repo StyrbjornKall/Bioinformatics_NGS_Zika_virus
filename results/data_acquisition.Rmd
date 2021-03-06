@@ -3,13 +3,12 @@ title: "Data Acquisition"
 #output: html_document
 ---
 
-**This notebook download and unzip the data files from ArrayExpress (https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-8905/samples/?query=zika)**
+**This notebook downloads and unzips the data files from ArrayExpress (https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-8905/samples/?query=zika). It also prepares a test data set which is used by the following scripts for faster run times.**
 
-* **Input** : txt file downloaded from ArrayExpress containing the list of the data to acquire.
-* **Output** : folder all_data containing all the unzipped data files
+- **Input:** link to .txt file from ArrayExpress containing metadata and the list of the URLs to the data to acquire.
+- **Output:** folder all_data containing all the unzipped data files and folder test_data containing the first 100 000 reads of WTP0. sample_URL_list.txt containing URLs to data and sample_metadata.txt.
 
 # Data acquisition 
-
 ## Acquire data
 
 Here we fetch all data from ArrayExpress

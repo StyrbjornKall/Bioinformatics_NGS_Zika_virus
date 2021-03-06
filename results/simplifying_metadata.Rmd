@@ -3,10 +3,10 @@ title: "Simplifying Metadata"
 #output: html_notebook
 ---
 
-**This notebook simplify the metadata file generated with the script data_acquisition.Rmd by removing the unwanted strains or passages for the study. This notebook can be used if you want to simplify the data set and focus on the study of one or several strains/passages. It generates a txt file that will be used in the script delete_files_from_list.Rmd to delete the undesired files**
+**This notebook simplifies the metadata file generated with the script data_acquisition.Rmd by removing the unwanted strains or passages for the study. This notebook can be used if you want to simplify the data set and focus on the study of one or several strains/passages. It generates a .txt file that will be used in the script delete_files_from_list.Rmd to delete the undesired files**
 
-* **Input** : sample_metadata.txt 
-* **Output** : simplified_metadata.txt 
+- **Input** : sample_metadata.txt 
+- **Output** : simplified_metadata.txt 
 
 ```{r}
 # Check workig directory
@@ -17,14 +17,15 @@ root = "/home/student12/project/"
 path_to_files = "data/all_data/"
 
 # List the files in a directory
-old_file_names = list.files(paste0(root,path_to_files), pattern = "*.fastq$")
+file_names = list.files(paste0(root,path_to_files), pattern = "*.fastq$")
 
 # Look at list
-head(old_file_names)
+head(file_names)
 ```
 
 
 ```{r}
+library(tidyverse)
 
 # Load metadata
 sample_metadata <- read_tsv(paste0(root,"data/sample_metadata.txt"))
@@ -35,8 +36,6 @@ head(sample_metadata)
 ```
 
 ```{r}
-library(tidyverse)
-
 # Extract sample names from metadata
 sample_metadata = cbind(sample_metadata, file_name = stringr::str_sub(sample_metadata$'Comment[FASTQ_URI]', -21, -4))
 
@@ -44,14 +43,14 @@ sample_metadata = cbind(sample_metadata, file_name = stringr::str_sub(sample_met
 head(sample_metadata)
 
 # Replace spaces with "_" and extract the necessary data
-new_sample_metadata = cbind(sample_metadata, new_file_names = paste0(stringr::str_replace_all(sample_metadata$`Factor Value[line]`, " ", "_"), ".fastq")) %>%
+simplified_metadata = cbind(sample_metadata, new_file_names = paste0(stringr::str_replace_all(sample_metadata$`Factor Value[line]`, " ", "_"), ".fastq")) %>%
   dplyr::select(file_name, new_file_names)
 
-head(new_sample_metadata)
+head(simplified_metadata)
 ```
 
 ```{r}
-write.table(new_sample_metadata, paste0(root, "data/","simplified_metadata.txt"),sep="\t",row.names=FALSE)
+write.table(simplified_metadata, paste0(root, "data/","simplified_metadata.txt"),sep="\t",row.names=FALSE)
 ```
 
 
