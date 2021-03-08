@@ -18,6 +18,9 @@ title: "Result visualization"
   
 ```{r, include = FALSE}
 
+# Install packages:
+install.packages("ggprism")
+
 # All the libraries required :
 library(tidyverse)
 library(ggrepel)
