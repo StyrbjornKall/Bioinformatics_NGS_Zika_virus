@@ -1,10 +1,14 @@
-# Using Next Generation Sequencing to Study the Genetic Diversity of Candidate Live Attenuated Zika Vaccines
+# Reproducing: Using Next Generation Sequencing to Study the Genetic Diversity of Candidate Live Attenuated Zika Vaccines
+This was done as a project in the course Applied Bioinformatics, Chalmers University of Technology.
 
+## Study
+The study reproduced is “Using Next Generation Sequencing to Study the Genetic Diversity of Candidate Live Attenuated Zika Vaccines” (DOI: https://doi.org/10.3390/vaccines8020161) by Natalie D Collins, Chao Shan, Bruno T D Nunes, Steven G Widen, Pei-Yong Shi, Alan D T Barrett, Vanessa V Sarathy, and is accessible here: https://www.mdpi.com/2076-393X/8/2/161/htm.
+
+## Data
 The data used were acquired on ArrayExpress (reference E-MTAB-8905, https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-8905/samples/?query=zika).
 
-The study reproduced is “Using Next Generation Sequencing to Study the Genetic Diversity of Candidate Live Attenuated Zika Vaccines” (DOI : https://doi.org/10.3390/vaccines8020161) by Natalie D Collins, Chao Shan, Bruno T D Nunes, Steven G Widen, Pei-Yong Shi, Alan D T Barrett, Vanessa V Sarathy  , and is accessible here : https://www.mdpi.com/2076-393X/8/2/161/htm.
-
-Please see this file as a shorter version of the provided report found in the docs directory and see to the provided project pipeline .png for a simplified look at the project data processing pipeline.
+## Repository contents
+Please see this file as a shorter version of the provided report found in the docs directory and see the provided project pipeline .png for a simplified look at the project data processing pipeline.
 
 In this repository are provided all the scripts used for the reproduction of the initial study. They must be run in this order respectively:
 
@@ -16,7 +20,7 @@ In this repository are provided all the scripts used for the reproduction of the
 
 - **study_pipeline.Rmd:** This script executes the pipeline described in the section “Material and Methods” of the report. It is written for a test data set and can be run from start (QC preprocessing) to finish (Shannon entropy calculation). The test data set is generated in the data_acquisition.Rmd script and consist of a pair-end read for WTZIKV P0. The script is written so that it is run with the data directory as its working directory.
 
-- **result_vizualisation.Rmd:** This notebook allows the analysis and visualization the results obtained from the study_pipeline.Rmd. The figures generated can be seen in the section “Results” of the report.
+- **result_vizualisation.Rmd:** This notebook allows the analysis and visualization of the results obtained from the study_pipeline.Rmd. The figures generated can be seen in the section “Results” of the report.
 
 
  
