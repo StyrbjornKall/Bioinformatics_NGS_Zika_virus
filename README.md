@@ -1,4 +1,4 @@
-##README
+# Using Next Generation Sequencing to Study the Genetic Diversity of Candidate Live Attenuated Zika Vaccines
 
 The data used were acquired on ArrayExpress (reference E-MTAB-8905, https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-8905/samples/?query=zika).
 
